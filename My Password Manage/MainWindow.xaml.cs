@@ -28,7 +28,7 @@ namespace My_Password_Manage
         private void BtnGeneratePwd_Click(object sender, RoutedEventArgs e)
         {
             GeneratePwd fmgp = new GeneratePwd();
-            fmgp.ShowDialog();
+            fmgp.ShowDialog(); 
         }
     }
 }
