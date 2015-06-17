@@ -23,5 +23,25 @@ namespace My_Password_Manage
         {
             InitializeComponent();
         }
+
+        private void btnLogin_Click(object sender, RoutedEventArgs e)
+        {
+            string userName = txtUserName.Text;
+            string userPwd = txtPassword.Password;
+            if (userName == "zgshi" && userPwd == "123456")
+            {
+                MainWindow manwin = new MainWindow();
+                manwin.Show();
+                this.Hide();
+                return;
+            }
+
+            MessageBox.Show("用户名或密码错误！");
+        }
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            App.Current.Shutdown();
+        }
     }
 }
