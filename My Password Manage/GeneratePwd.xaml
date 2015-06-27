@@ -19,5 +19,7 @@
         <CheckBox Content="大写字母" HorizontalAlignment="Left" Margin="247,65,0,0" VerticalAlignment="Top"/>
         <CheckBox Content="特殊字符" HorizontalAlignment="Left" Margin="320,65,0,0" VerticalAlignment="Top"/>
         <Button x:Name="BtnGeneratePwd" Content="生  成" HorizontalAlignment="Left" Margin="64,117,0,0" VerticalAlignment="Top" Width="75"/>
+
+
     </Grid>
 </Window>
