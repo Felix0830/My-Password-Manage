@@ -28,6 +28,10 @@ namespace My_Password_Manage
         {
             string userName = txtUserName.Text;
             string userPwd = txtPassword.Password;
+            //TODO: Test
+            userName = "zgshi";
+            userPwd = "123456";
+
             if (userName == "zgshi" && userPwd == "123456")
             {
                 MainWindow manwin = new MainWindow();

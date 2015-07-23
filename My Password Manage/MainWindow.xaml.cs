@@ -30,5 +30,10 @@ namespace My_Password_Manage
             GeneratePwd fmgp = new GeneratePwd();
             fmgp.ShowDialog(); 
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
     }
 }
