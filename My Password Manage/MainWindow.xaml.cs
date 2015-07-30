@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PasswordManage.DAL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,6 +35,26 @@ namespace My_Password_Manage
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            string typeName = txtSiteType.Text.Trim();
+            if (typeName == string.Empty)
+            {
+                MessageBox.Show("站点类型不允许为空！");
+                return;
+            }
+
+            bool isSuccess = PasswordManageSQLService.Instance.AddSiteType(typeName);
+            if (isSuccess)
+            {
+                MessageBox.Show("站点类型添加成功！");
+            }
+            else
+            {
+                MessageBox.Show("站点类型添加失败！");
+            }
         }
     }
 }
