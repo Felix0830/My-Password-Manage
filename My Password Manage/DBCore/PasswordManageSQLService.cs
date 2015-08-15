@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using System.Data.SQLite;
+using PasswordManage.Model;
 
 namespace PasswordManage.DAL
 {
@@ -46,6 +47,22 @@ namespace PasswordManage.DAL
         #endregion
 
         #region 添加站点
+        public bool AddSite(PasswordModel model)
+        {
+            string addSql = @"INSERT INTO PasswordList(TypeID,Url,Uid,Pwd,Explain,UpdatedTime)
+                            VALUES(@typeid,@url,@uid,@pwd,@explain,@updatedtime)";
+
+            SQLiteParameter[] arParam = new SQLiteParameter[5];
+            arParam[0] = new SQLiteParameter("@typeid", model.TypeID);
+            arParam[1] = new SQLiteParameter("@url",model.URL);
+            arParam[2] = new SQLiteParameter("@uid", model.UserName);
+            arParam[3] = new SQLiteParameter("@pwd", model.UserPWD);
+            arParam[4] = new SQLiteParameter("@explain", model.Explain);
+            arParam[5] = new SQLiteParameter("@updatedtime", model.UpdateTime);
+
+            bool isSuccess = DBHelper.ExcuteNonQuery(addSql, arParam);
+            return isSuccess;
+        }
         #endregion
 
         #region 获取所有站点

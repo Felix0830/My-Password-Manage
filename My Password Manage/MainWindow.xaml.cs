@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using PasswordManage.Model;
 
 namespace My_Password_Manage
 {
@@ -26,10 +27,10 @@ namespace My_Password_Manage
             InitializeComponent();
         }
 
-        private void BtnGeneratePwd_Click(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            GeneratePwd fmgp = new GeneratePwd();
-            fmgp.ShowDialog(); 
+            
+            MessageBox.Show("sfs");
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -37,6 +38,11 @@ namespace My_Password_Manage
             Application.Current.Shutdown();
         }
 
+        /// <summary>
+        /// 添加网站类型
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
             string typeName = txtSiteType.Text.Trim();
@@ -55,6 +61,42 @@ namespace My_Password_Manage
             {
                 MessageBox.Show("站点类型添加失败！");
             }
+            txtSiteType.Text = string.Empty;
         }
+
+        /// <summary>
+        /// 添加网站
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnAddSite_Click(object sender, RoutedEventArgs e)
+        {
+            string siteType = cbSiteType.SelectedValue.ToString();
+            string url = txtSite.Text;
+            string userName = txtUserName.Text;
+            if (txtUserPwd.Password != txtUserPwdConfirm.Password)
+            {
+                MessageBox.Show("两次密码输入一致，请重新输入！");
+                return;
+            }
+            string pwd = txtUserPwd.Password;
+            string explain = txtUserRemarks.Text;
+
+            PasswordModel model = new PasswordModel()
+            {
+                TypeID = int.Parse(siteType),
+                URL = url,
+                UserName = userName,
+                UserPWD = pwd,
+                Explain = explain
+            };
+
+            bool isSuccess = PasswordManageSQLService.Instance.AddSite(model);
+
+        }
+
+       
+
+
     }
 }
