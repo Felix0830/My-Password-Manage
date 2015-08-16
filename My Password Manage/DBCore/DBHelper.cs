@@ -11,7 +11,7 @@ namespace PasswordManage.DAL
     class DBHelper
     {
         #region CreatedConnString
-        private static readonly string connStr = @"E:\Pwd.db";
+        private static readonly string connStr = @"e:\Pwd.db";
         private static SQLiteConnection CreateConn()
         {
             SQLiteConnectionStringBuilder sb = new SQLiteConnectionStringBuilder();

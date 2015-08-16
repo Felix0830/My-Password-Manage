@@ -14,8 +14,7 @@
 
                         <Grid>
                             <Label Name="labType" Content="选择类型：" Height="30"></Label>
-                            <ComboBox Name="cbChooseType" Width="150" Height="30" HorizontalAlignment="Left" Margin="70,0,0,0">
-                            </ComboBox>
+                            <ComboBox Name="cbChooseType" Width="150" Height="30" HorizontalAlignment="Left" Margin="70,0,0,0"></ComboBox>
                             <Button Name="btn" Content="查看" HorizontalAlignment="Right" Height="30" Width="60" Margin="0,0,20,0"></Button>
                         </Grid>
 
@@ -38,11 +37,12 @@
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
                             <RowDefinition Height="100"></RowDefinition>
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
                         
-                        <Label Name="lbSiteType" Content="类  型" HorizontalAlignment="Right" VerticalAlignment="Center"></Label>
+                        <Label Name="lbSiteType" Content="类  型：" HorizontalAlignment="Right" VerticalAlignment="Center"></Label>
                         <ComboBox Name="cbSiteType" HorizontalAlignment="Left" VerticalAlignment="Center" Width="300" Grid.Column="1"></ComboBox>
                         
                         <Label Name="lbSite" Content="网  址：" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="1"></Label>
@@ -57,10 +57,13 @@
                         <Label Name="lbUserPwdConfirm" Content="确认密码：" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="4"></Label>
                         <PasswordBox Name="txtUserPwdConfirm" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Center" Width="450" Height="30" Grid.Row="4" Grid.Column="1"></PasswordBox>
 
-                        <Label Name="lbRemarks" Content="备  注：" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="5"></Label>
-                        <TextBox Name="txtUserRemarks" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Width="600"  Height="100" Grid.Row="5" Grid.Column="1"></TextBox>
+                        <Label Name="lbPasswordKey" Content="密  钥：" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="5"></Label>
+                        <TextBox Name="txtPasswordKey" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Center" Width="450" Height="30" Grid.Row="5" Grid.Column="1"></TextBox>
                         
-                        <Button Name="btnAddSite" Content="添  加" Width="80" Height="40" HorizontalAlignment="Left" Grid.Row="6" Grid.Column="1" Click="btnAddSite_Click"></Button>
+                        <Label Name="lbRemarks" Content="备  注：" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="6"></Label>
+                        <TextBox Name="txtUserRemarks" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Width="600"  Height="100" Grid.Row="6" Grid.Column="1"></TextBox>
+                        
+                        <Button Name="btnAddSite" Content="添  加" Width="80" Height="40" HorizontalAlignment="Left" Grid.Row="7" Grid.Column="1" Click="btnAddSite_Click"></Button>
 
                     </Grid>
                 </TabItem>

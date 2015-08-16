@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using PasswordManage.Model;
+using System.Data;
+using PasswordManage.Common;
 
 namespace My_Password_Manage
 {
@@ -29,13 +31,25 @@ namespace My_Password_Manage
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            
-            MessageBox.Show("sfs");
+            ComboxDataBaind();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void ComboxDataBaind()
+        {
+            
+            DataTable dt = PasswordManageSQLService.Instance.GetSiteType();
+            this.cbChooseType.ItemsSource = dt.AsDataView();
+            this.cbChooseType.SelectedValuePath = "TypeID";
+            this.cbChooseType.DisplayMemberPath = "TypeName";
+
+            this.cbSiteType.ItemsSource = dt.AsDataView();
+            this.cbSiteType.SelectedValuePath = "TypeID";
+            this.cbSiteType.DisplayMemberPath = "TypeName";
         }
 
         /// <summary>
@@ -56,6 +70,7 @@ namespace My_Password_Manage
             if (isSuccess)
             {
                 MessageBox.Show("站点类型添加成功！");
+                ComboxDataBaind();
             }
             else
             {
@@ -71,31 +86,59 @@ namespace My_Password_Manage
         /// <param name="e"></param>
         private void btnAddSite_Click(object sender, RoutedEventArgs e)
         {
-            string siteType = cbSiteType.SelectedValue.ToString();
+            string siteTypeID = cbSiteType.SelectedValue.ToString();
             string url = txtSite.Text;
             string userName = txtUserName.Text;
             if (txtUserPwd.Password != txtUserPwdConfirm.Password)
             {
                 MessageBox.Show("两次密码输入一致，请重新输入！");
+                txtUserPwd.Password = string.Empty;
+                txtUserPwdConfirm.Password = string.Empty;
                 return;
             }
             string pwd = txtUserPwd.Password;
+            string key = txtPasswordKey.Text.Trim();
+            if (string.IsNullOrEmpty(key))
+            {
+                MessageBox.Show("请输入加密密钥！");
+                return;
+            }
             string explain = txtUserRemarks.Text;
 
-            PasswordModel model = new PasswordModel()
+            try
             {
-                TypeID = int.Parse(siteType),
-                URL = url,
-                UserName = userName,
-                UserPWD = pwd,
-                Explain = explain
-            };
+                EncryptHelper eh = new EncryptHelper(key);
+                PasswordModel model = new PasswordModel()
+                {
+                    TypeID = int.Parse(siteTypeID),
+                    URL = url,
+                    UserName = userName,
+                    UserPWD = eh.EncryptString(pwd),
+                    Explain = explain,
+                    UpdateTime = DateTime.Now
+                };
 
-            bool isSuccess = PasswordManageSQLService.Instance.AddSite(model);
-
+                bool isSuccess = PasswordManageSQLService.Instance.AddSite(model);
+                if (isSuccess)
+                {
+                    MessageBox.Show("新网站添加成功！");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("系统发生异常，请稍候再试！");
+            }
+            finally
+            {
+                cbSiteType.SelectedIndex = 0;
+                txtSite.Text = string.Empty;
+                txtUserName.Text = string.Empty;
+                txtUserPwd.Password = string.Empty;
+                txtUserPwdConfirm.Password = string.Empty;
+                txtPasswordKey.Text = string.Empty;
+                txtUserRemarks.Text = string.Empty;
+            }
         }
-
-       
 
 
     }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using System.Data.SQLite;
 using PasswordManage.Model;
+using System.Data;
 
 namespace PasswordManage.DAL
 {
@@ -46,13 +47,19 @@ namespace PasswordManage.DAL
         }
         #endregion
 
+        public DataTable GetSiteType()
+        {
+            string sql = "SELECT TypeID,TypeName FROM WebSiteType";
+            return DBHelper.GetDataTableBySql(sql);
+        }
+
         #region 添加站点
         public bool AddSite(PasswordModel model)
         {
             string addSql = @"INSERT INTO PasswordList(TypeID,Url,Uid,Pwd,Explain,UpdatedTime)
                             VALUES(@typeid,@url,@uid,@pwd,@explain,@updatedtime)";
 
-            SQLiteParameter[] arParam = new SQLiteParameter[5];
+            SQLiteParameter[] arParam = new SQLiteParameter[6];
             arParam[0] = new SQLiteParameter("@typeid", model.TypeID);
             arParam[1] = new SQLiteParameter("@url",model.URL);
             arParam[2] = new SQLiteParameter("@uid", model.UserName);
