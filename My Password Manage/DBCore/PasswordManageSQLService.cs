@@ -17,7 +17,7 @@ namespace PasswordManage.DAL
 
         public static PasswordManageSQLService Instance
         {
-            get 
+            get
             {
                 if (instance == null)
                 {
@@ -31,7 +31,7 @@ namespace PasswordManage.DAL
         #region 添加站点类型
         public bool AddSiteType(string typeName)
         {
-           
+
             string querySql = "SELECT TypeName FROM WebSiteType WHERE TypeName=@TypeName";
             string addSql = "INSERT INTO WebSiteType(TypeName)VALUES(@TypeName)";
 
@@ -61,7 +61,7 @@ namespace PasswordManage.DAL
 
             SQLiteParameter[] arParam = new SQLiteParameter[6];
             arParam[0] = new SQLiteParameter("@typeid", model.TypeID);
-            arParam[1] = new SQLiteParameter("@url",model.URL);
+            arParam[1] = new SQLiteParameter("@url", model.URL);
             arParam[2] = new SQLiteParameter("@uid", model.UserName);
             arParam[3] = new SQLiteParameter("@pwd", model.UserPWD);
             arParam[4] = new SQLiteParameter("@explain", model.Explain);
@@ -73,6 +73,18 @@ namespace PasswordManage.DAL
         #endregion
 
         #region 获取所有站点
+        public DataTable GetPwdInfos(int typeID = 0)
+        {
+            SQLiteParameter[] arParam = null;
+            string querySql = "SELECT Id,TypeID,Url,Uid,Pwd,Explain FROM PasswordList ";
+            if (typeID != 0)
+            {
+                querySql += " WHERE TypeID=@typeid";
+                arParam = new SQLiteParameter[1];
+                arParam[0] = new SQLiteParameter("@typeid",DbType.Int32,typeID);
+            }
+            return DBHelper.GetDataTableBySql(querySql, arParam);
+        }
         #endregion
 
         #region 根据站点类型获得全部站点

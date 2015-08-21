@@ -32,6 +32,13 @@ namespace My_Password_Manage
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             ComboxDataBaind();
+            InitGridView();
+        }
+
+        private void InitGridView()
+        {
+            DataTable dt = PasswordManageSQLService.Instance.GetPwdInfos();
+            dgPwdInfoView.ItemsSource = dt.AsDataView();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
