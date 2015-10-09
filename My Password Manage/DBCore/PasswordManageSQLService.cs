@@ -81,7 +81,7 @@ namespace PasswordManage.DAL
             {
                 querySql += " WHERE TypeID=@typeid";
                 arParam = new SQLiteParameter[1];
-                arParam[0] = new SQLiteParameter("@typeid",DbType.Int32,typeID);
+                arParam[0] = new SQLiteParameter("@typeid",typeID);
             }
             return DBHelper.GetDataTableBySql(querySql, arParam);
         }

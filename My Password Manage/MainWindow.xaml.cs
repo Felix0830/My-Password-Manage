@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using PasswordManage.Model;
 using System.Data;
 using PasswordManage.Common;
+using My_Password_Manage.Model;
 
 namespace My_Password_Manage
 {
@@ -48,15 +49,33 @@ namespace My_Password_Manage
 
         private void ComboxDataBaind()
         {
-            
             DataTable dt = PasswordManageSQLService.Instance.GetSiteType();
-            this.cbChooseType.ItemsSource = dt.AsDataView();
+
+            List<SiteTypeModel> siteTypeLists = new List<SiteTypeModel>() { 
+                new SiteTypeModel(){
+                    TypeID=0,
+                    TypeName="请选择"
+                }
+            };
+
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                SiteTypeModel obj = new SiteTypeModel();
+                obj.TypeID = int.Parse(dt.Rows[i][0].ToString());
+                obj.TypeName = dt.Rows[i][1].ToString();
+
+                siteTypeLists.Add(obj);
+            }
+
+            this.cbChooseType.ItemsSource = siteTypeLists;// dt.AsDataView();           
             this.cbChooseType.SelectedValuePath = "TypeID";
             this.cbChooseType.DisplayMemberPath = "TypeName";
+            this.cbChooseType.SelectedIndex = 0;
 
-            this.cbSiteType.ItemsSource = dt.AsDataView();
+            this.cbSiteType.ItemsSource = siteTypeLists;// dt.AsDataView();
             this.cbSiteType.SelectedValuePath = "TypeID";
             this.cbSiteType.DisplayMemberPath = "TypeName";
+            this.cbSiteType.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -93,7 +112,13 @@ namespace My_Password_Manage
         /// <param name="e"></param>
         private void btnAddSite_Click(object sender, RoutedEventArgs e)
         {
-            string siteTypeID = cbSiteType.SelectedValue.ToString();
+            var siteTypeObj = (SiteTypeModel)cbSiteType.SelectedItem;
+            string siteTypeID = siteTypeObj.TypeID.ToString();
+            if (siteTypeObj.TypeName == "请选择")
+            {
+                MessageBox.Show("请选择网站类型");
+                return;
+            }
             string url = txtSite.Text;
             string userName = txtUserName.Text;
             if (txtUserPwd.Password != txtUserPwdConfirm.Password)
@@ -105,13 +130,14 @@ namespace My_Password_Manage
             }
             string pwd = txtUserPwd.Password;
             string key = txtPasswordKey.Text.Trim();
+            key = "iloveyou"; //todo:test
             if (string.IsNullOrEmpty(key))
             {
                 MessageBox.Show("请输入加密密钥！");
                 return;
             }
             string explain = txtUserRemarks.Text;
-
+            
             try
             {
                 EncryptHelper eh = new EncryptHelper(key);
@@ -120,7 +146,8 @@ namespace My_Password_Manage
                     TypeID = int.Parse(siteTypeID),
                     URL = url,
                     UserName = userName,
-                    UserPWD = eh.EncryptString(pwd),
+                    //UserPWD = eh.EncryptString(pwd),
+                    UserPWD = pwd,
                     Explain = explain,
                     UpdateTime = DateTime.Now
                 };
@@ -129,6 +156,8 @@ namespace My_Password_Manage
                 if (isSuccess)
                 {
                     MessageBox.Show("新网站添加成功！");
+                    //重新加载gridview
+                    InitGridView();
                 }
             }
             catch (Exception ex)
@@ -145,6 +174,56 @@ namespace My_Password_Manage
                 txtPasswordKey.Text = string.Empty;
                 txtUserRemarks.Text = string.Empty;
             }
+        }
+
+        private void cbChooseType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DataTable dt = null;
+            var item = (SiteTypeModel)cbChooseType.SelectedItem;
+            if (item.TypeName == "请选择")
+            {
+                dt = PasswordManageSQLService.Instance.GetPwdInfos();
+            }
+            else
+            {
+                dt = PasswordManageSQLService.Instance.GetPwdInfos(item.TypeID);
+            }
+
+            dgPwdInfoView.ItemsSource = dt.AsDataView();
+        }
+
+        /// <summary>
+        /// 查看密码
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnShowPwd_Click(object sender, RoutedEventArgs e)
+        {
+            string key = txtPwdKey.Password;
+            if (string.IsNullOrEmpty(key))
+            {
+                return;
+            }
+
+            DataTable dt = null;
+            var item = (SiteTypeModel)cbChooseType.SelectedItem;
+            if (item.TypeName == "请选择")
+            {
+                dt = PasswordManageSQLService.Instance.GetPwdInfos();
+            }
+            else
+            {
+                dt = PasswordManageSQLService.Instance.GetPwdInfos(item.TypeID);
+            }
+
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                EncryptHelper encryptHelper = new EncryptHelper(key);
+                string v = encryptHelper.DecryptString(dt.Rows[i][4].ToString());
+                dt.Rows[i][4] = v;
+            }
+
+            dgPwdInfoView.ItemsSource = dt.AsDataView();
         }
 
 

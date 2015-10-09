@@ -13,9 +13,11 @@
                         </Grid.RowDefinitions>
 
                         <Grid>
-                            <Label Name="labType" Content="选择类型：" Height="30"></Label>
-                            <ComboBox Name="cbChooseType" Width="150" Height="30" HorizontalAlignment="Left" Margin="70,0,0,0"></ComboBox>
-                            <Button Name="btn" Content="查看" HorizontalAlignment="Right" Height="30" Width="60" Margin="0,0,20,0"></Button>
+                            <Label Name="labType" Content="选择类型：" Height="30" Width="70" HorizontalAlignment="Left"></Label>
+                            <ComboBox Name="cbChooseType" Width="150" Height="30" HorizontalAlignment="Left" Margin="70,0,0,0" SelectionChanged="cbChooseType_SelectionChanged"></ComboBox>
+                            <Label Name="labPwdKey" Content="请输入密钥：" Height="30" Width="80" HorizontalAlignment="Left" Margin="230,0,0,0"></Label>
+                            <PasswordBox Name="txtPwdKey" Height="30" Width="180" HorizontalAlignment="Left" Margin="310,0,0,0"></PasswordBox>
+                            <Button Name="btnShowPwd" Content="查看" Height="30" Width="60" HorizontalAlignment="Left" Margin="500,0,0,0" Click="btnShowPwd_Click"></Button>
                         </Grid>
 
 
