@@ -1,7 +1,18 @@
 ﻿<Window x:Class="My_Password_Manage.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="My Password Manage" Height="600" Width="1000" Closing="Window_Closing" Loaded="Window_Loaded" ResizeMode="NoResize">
+        Title="My Password Manage" Height="600" Width="1000" Closing="Window_Closing" Loaded="Window_Loaded" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" >
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+        </Style>
+        <Style TargetType="PasswordBox">
+            <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid>
             <TabControl Name="tabManWin">
@@ -20,11 +31,10 @@
                             <Button Name="btnShowPwd" Content="查看" Height="30" Width="60" HorizontalAlignment="Left" Margin="500,0,0,0" Click="btnShowPwd_Click"></Button>
                         </Grid>
 
-
                         <DockPanel Grid.Row="1" Height="500" VerticalAlignment="Top">
                             <DataGrid Name="dgPwdInfoView" ItemsSource="{Binding}" AutoGenerateColumns="False" DockPanel.Dock="Top" IsReadOnly="True">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="类型" Width="100" Binding="{Binding TypeID}"/>
+                                    <DataGridTextColumn Header="类型" Width="100" Visibility="Hidden" Binding="{Binding TypeID}"/>
                                     <DataGridTextColumn Header="站点" Width="190" Binding="{Binding Url}"/>
                                     <DataGridTextColumn Header="用户名" Width="120" Binding="{Binding Uid}"/>
                                     <DataGridTextColumn Header="密码" Width="120" Binding="{Binding Pwd}"/>
@@ -32,10 +42,9 @@
                                 </DataGrid.Columns>
                             </DataGrid>
                         </DockPanel>
-
-
                     </Grid>
                 </TabItem>
+                
                 <TabItem Header="添加">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -54,7 +63,7 @@
                         </Grid.RowDefinitions>
 
                         <Label Name="lbSiteType" Content="类  型：" HorizontalAlignment="Right" VerticalAlignment="Center"></Label>
-                        <ComboBox Name="cbSiteType" HorizontalAlignment="Left" VerticalAlignment="Center" Width="300" Grid.Column="1"></ComboBox>
+                        <ComboBox Name="cbSiteType" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="300" Grid.Column="1"></ComboBox>
 
                         <Label Name="lbSite" Content="网  址：" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="1"></Label>
                         <TextBox Name="txtSite" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Center" Width="450" Height="30" Grid.Row="1" Grid.Column="1"></TextBox>
@@ -72,12 +81,13 @@
                         <TextBox Name="txtPasswordKey" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Center" Width="450" Height="30" Grid.Row="5" Grid.Column="1"></TextBox>
 
                         <Label Name="lbRemarks" Content="备  注：" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="6"></Label>
-                        <TextBox Name="txtUserRemarks" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Width="600"  Height="100" Grid.Row="6" Grid.Column="1"></TextBox>
+                        <TextBox Name="txtUserRemarks" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" VerticalContentAlignment="Top" Width="600"  Height="100" Grid.Row="6" Grid.Column="1"></TextBox>
 
                         <Button Name="btnAddSite" Content="添  加" Width="80" Height="40" HorizontalAlignment="Left" Grid.Row="7" Grid.Column="1" Click="btnAddSite_Click"></Button>
 
                     </Grid>
                 </TabItem>
+                
                 <TabItem Header="配置">
                     <Grid>
                         <GroupBox Header="添加网站类型" HorizontalAlignment="Left" Margin="25,10,0,0" VerticalAlignment="Top" Height="125" Width="183">
