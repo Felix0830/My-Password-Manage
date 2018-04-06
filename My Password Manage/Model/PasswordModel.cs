@@ -9,6 +9,10 @@ namespace PasswordManage.Model
     public class PasswordModel
     {
         /// <summary>
+        /// 主键 
+        /// </summary>
+        public int Id { get; set; }
+        /// <summary>
         /// 网站地址
         /// </summary>
         public string URL { get; set; }
@@ -36,5 +40,9 @@ namespace PasswordManage.Model
         /// 最后修改时间
         /// </summary>
         public DateTime UpdateTime { get; set; }
+        /// <summary>
+        /// 密钥
+        /// </summary>
+        public string Secretkey { get; set; }
     }
 }

@@ -25,6 +25,7 @@ namespace My_Password_Manage
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static DataTable _dt = null;
         public MainWindow()
         {
             InitializeComponent();
@@ -32,14 +33,20 @@ namespace My_Password_Manage
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            dgPwdInfoView.AutoGenerateColumns = false;
             ComboxDataBaind();
             InitGridView();
         }
 
         private void InitGridView()
         {
-            DataTable dt = PasswordManageSQLService.Instance.GetPwdInfos();
-            dgPwdInfoView.ItemsSource = dt.AsDataView();
+            GetPwdInfo();
+            BindGrid();
+        }
+
+        private void BindGrid()
+        {
+            dgPwdInfoView.ItemsSource = _dt.AsDataView();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -130,7 +137,6 @@ namespace My_Password_Manage
             }
             string pwd = txtUserPwd.Password;
             string key = txtPasswordKey.Text.Trim();
-            key = "iloveyou"; //todo:test
             if (string.IsNullOrEmpty(key))
             {
                 MessageBox.Show("请输入加密密钥！");
@@ -146,8 +152,7 @@ namespace My_Password_Manage
                     TypeID = int.Parse(siteTypeID),
                     URL = url,
                     UserName = userName,
-                    //UserPWD = eh.EncryptString(pwd),
-                    UserPWD = pwd,
+                    UserPWD = eh.EncryptString(pwd),
                     Explain = explain,
                     UpdateTime = DateTime.Now
                 };
@@ -180,6 +185,11 @@ namespace My_Password_Manage
         {
             DataTable dt = null;
             var item = (SiteTypeModel)cbChooseType.SelectedItem;
+            if (item == null)
+            {
+                return;
+            }
+
             if (item.TypeName == "请选择")
             {
                 dt = PasswordManageSQLService.Instance.GetPwdInfos();
@@ -209,11 +219,13 @@ namespace My_Password_Manage
             var item = (SiteTypeModel)cbChooseType.SelectedItem;
             if (item.TypeName == "请选择")
             {
-                dt = PasswordManageSQLService.Instance.GetPwdInfos();
+                //dt = PasswordManageSQLService.Instance.GetPwdInfos();
+                dt = GetPwdInfo();
             }
             else
             {
-                dt = PasswordManageSQLService.Instance.GetPwdInfos(item.TypeID);
+                //dt = PasswordManageSQLService.Instance.GetPwdInfos(item.TypeID);
+                dt = GetPwdInfo(item.TypeID);
             }
 
             for (int i = 0; i < dt.Rows.Count; i++)
@@ -223,9 +235,49 @@ namespace My_Password_Manage
                 dt.Rows[i][4] = v;
             }
 
-            dgPwdInfoView.ItemsSource = dt.AsDataView();
+            BindGrid();
         }
 
+        private DataTable GetPwdInfo(int? typeId=null)
+        {
+            if (typeId.HasValue)
+            {
+                _dt = PasswordManageSQLService.Instance.GetPwdInfos(typeId.Value);
+            }
+            else
+            {
+                _dt = PasswordManageSQLService.Instance.GetPwdInfos();
+            }
+            return _dt;
+        }
 
+        private void tabManWin_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //TODO: 未解决中。。。。
+            //MessageBox.Show("qq");
+        }
+
+        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            Button bt = (Button)sender;
+            var id = int.Parse(bt.Tag.ToString());
+
+            var p = new PasswordModel();
+            for (int i = 0; i<_dt.Rows.Count;i++ )
+            {
+                var cuid = int.Parse(_dt.Rows[i]["Id"].ToString());
+                if(cuid == id)
+                {
+                   p.UserName = _dt.Rows[i]["Uid"].ToString();
+                   p.URL =_dt.Rows[i]["Url"].ToString();
+                   p.TypeID = int.Parse(_dt.Rows[i]["TypeID"].ToString());
+                   p.Explain = _dt.Rows[i]["Explain"].ToString();
+                   p.Id = id;
+                   p.Secretkey = "iloveyou";
+                }
+            }
+            UpdatePwd updatePwd = new UpdatePwd(p);
+            updatePwd.ShowDialog();
+        }
     }
 }

@@ -87,7 +87,36 @@ namespace PasswordManage.DAL
         }
         #endregion
 
-        #region 根据站点类型获得全部站点
+        #region 修改站点密码
+
+        /// <summary>
+        /// 验证旧密码是否正确
+        /// </summary>
+        /// <param name="sideId">主键</param>
+        /// <param name="oldPwd">旧密码</param>
+        /// <returns></returns>
+        public bool VerificationOldPwd(int sideId, string oldPwd)
+        {
+            var sql = "select id from PasswordList where id=@id and pwd=@pwd";
+            SQLiteParameter[] param = new SQLiteParameter[2];
+            param[0] = new SQLiteParameter("@id", sideId);
+            param[1] = new SQLiteParameter("@pwd", oldPwd);
+            var obj = DBHelper.ExcuteScalar(sql, param);
+            return obj != null;
+        }
+
+        public bool UpdateSidePwd(int sideId,string oldPwd, string newPwd,string explain)
+        {
+            var sql = "update PasswordList set oldpwd=@oldPwd || '$!$' || oldpwd,pwd=@newpwd,explain=@explain,updatedTime=datetime('now', 'localtime') where id=@id";
+            SQLiteParameter[] param = new SQLiteParameter[4];
+            param[0] = new SQLiteParameter("@id", sideId);
+            param[1] = new SQLiteParameter("@newpwd", newPwd);
+            param[2] = new SQLiteParameter("@oldpwd", oldPwd);
+            param[3] = new SQLiteParameter("@explain",explain);
+            var result = DBHelper.ExcuteNonQuery(sql, param);
+            return result;
+        }
+
         #endregion
     }
 }
